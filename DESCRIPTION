@@ -1,0 +1,22 @@
+Package: dendroLib
+Type: Package
+Title: Library with nonlinear methods for analyzing dendroclimatological data 
+Version: 0.0.1
+Author: Jernej Jevsenak [aut, cre, cph], Tom Levanič
+Maintainer: Jernej Jevsenak <jernej.jevsenak@gmail.com>
+Description: Library that implements novel dendroclimatological
+    methods, primarly used by the Tree-ring reasearch community. Functions are
+    meant to introduce nonlinear methods in dendroclimatological analysis. 
+    So far, the core function is daily_response, which finds the optimal 
+    sequence of days that are linearly or nonlinearly related to a tree-ring 
+    proxy records. 
+License: GPL-3
+URL: http://github.com/jernejjevsenak/dendroLib
+BugReports: http://github.com/jernejjevsenak/dendroLib/issues
+Encoding: UTF-8
+LazyData: true
+Suggests: testthat
+RoxygenNote: 6.0.1
+Imports: ggplot2 (>= 2.2.0), brnn (>= 0.6), reshape2 (>= 1.4.2), oce (>= 0.9-21), 
+    stats (>= 3.4.0), scales (>= 0.4.1)
+Depends: R (>= 3.1)

@@ -1,0 +1,81 @@
+library(dendroLib)
+library(testthat)
+
+data(daily_temperatures_LJ)
+data(example_proxies)
+carbon_isotope <- example_proxies[, 3]
+
+# If test is repeated, equal result should be obtained
+test1 <- daily_response(response = carbon_isotope,
+                        env_data = daily_temperatures_LJ, method = "lm",
+                        lower = 240, upper = 250)
+
+test2 <- daily_response(response = carbon_isotope,
+                        env_data = daily_temperatures_LJ, method = "lm",
+                        lower = 240, upper = 250)
+
+expect_equal(test1, test2)
+
+
+# daily_response function should return a list with matrix and two characters
+test3 <- daily_response(response = example_proxies,
+  env_data = daily_temperatures_LJ, method = "brnn", measure = "adj.r.squared",
+  lower = 250, upper = 253, previous_year = TRUE)
+expect_is(test3, "list")
+expect_is(test3[[1]], "matrix")
+expect_is(test3[[2]], "character")
+expect_is(test3[[2]], "character")
+
+# All ggplots should be of a class list
+plot1 <- plot_extreme(test3)
+plot2 <- plot_heatmap(test3)
+plot3 <- plot_specific(test3, window_width = 252)
+
+expect_is(plot1, "list")
+expect_is(plot2, "list")
+
+
+# stop functions were included to prevent wrong results
+expect_error(daily_response(response = carbon_isotope,
+                            env_data = daily_temperatures_LJ, lower = 200,
+                            upper = 270, fixed_width = -368))
+
+expect_error(daily_response(response = example_proxies,
+  env_data = daily_temperatures_LJ, method = "cor", lower = 250, upper = 270,
+  previous_year = FALSE))
+
+expect_error(daily_response(response = example_proxies,
+  env_data = daily_temperatures_LJ, method = "cor", lower = 280, upper = 270,
+  previous_year = FALSE))
+
+
+# r.squared is squared correlation. Results should be equal
+test4 <- daily_response(response = carbon_isotope,
+                        env_data = daily_temperatures_LJ, method = "cor",
+                        lower = 250, upper = 270, previous_year = FALSE)
+
+test5 <- daily_response(response = carbon_isotope,
+                        env_data = daily_temperatures_LJ, method = "lm",
+                        lower = 250, upper = 270, previous_year = FALSE)
+expect_equal(max(test4[[1]], na.rm = TRUE) ^ 2, max(test5[[1]], na.rm = TRUE))
+
+
+# Check for smooth_matrix
+test6 <- matrix(seq(1.01, 2, by = 0.01), ncol = 10, byrow = TRUE)
+test7 <- test6
+test7[5, 5] <- -1
+test7 <- smooth_matrix(test7, factor_drop = 0.7)
+expect_equal(test6, test7)
+
+# A test for critical R
+# when the same data is used and alpha is reduced, there should be a higher
+# threshold for statistical significance
+t1 <- critical_r(100, alpha = 0.05)
+t2 <- critical_r(100, alpha = 0.01)
+expect_equal(t2 > t1, TRUE)
+
+# when the same alpha is used and number of observations is reduced, higher
+# threshold for statistical significance is expected
+t1 <- critical_r(100, alpha = 0.05)
+t2 <- critical_r(80, alpha = 0.05)
+expect_equal(t2 > t1, TRUE)
