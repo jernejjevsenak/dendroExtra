@@ -15,16 +15,16 @@ You can install dendroLib from github with:
 devtools::install_github("jernejjevsenak/dendroLib")
 ```
 
-Example
--------
+Examples
+--------
 
 This is a basic example which shows you how to use the package:
 
 ``` r
 ## basic example code
+library(dendroLib)
 data(daily_temperatures_LJ) 
 data(example_proxies)
-library(dendroLib)
 result1 <- daily_response(response = example_proxies, env_data = daily_temperatures_LJ, 
                             method = "lm", measure = "r.squared", lower_limit = 150, upper_limit = 155)
 ```
@@ -54,7 +54,6 @@ Authors
 
 -   **Jernej Jevšenak**
 
-Acknowledgments
----------------
+### Collaborators
 
--   I am greatful to my menthor dr. Tom Levanič, who supportes at my work.
+-   I am greatful to my menthor dr. Tom Levanič, who supportes me at my work.
