@@ -32,10 +32,11 @@ devtools::install_github("jernejjevsenak/dendroLib")
 
 This is a basic example which shows you how to use the package: 
 
-```{r example}
+```{r example, results = 'hide'}
 ## basic example code
 data(daily_temperatures_LJ) 
 data(example_proxies)
+library(dendroLib)
 result1 <- daily_response(response = example_proxies, env_data = daily_temperatures_LJ, 
 							method = "lm", measure = "r.squared", lower_limit = 150, upper_limit = 155)
 
@@ -43,7 +44,7 @@ result1 <- daily_response(response = example_proxies, env_data = daily_temperatu
 The return of this function is a list with three elements: @calculations, @method, @measure. The return is organized in a way, that can be used by three plotting functions: plot_extreme(), plot_specific() and plot_heatmap(). 
 Function plot_extreme() graphs a line plot of a row with the highest calculated measure. It indicates the sequence of days, that are the most related to the response variable(s). With plot_specific(), measures with selected window width are plotted. Function plot_heatmap() is a visual representation of calculated values.
 
-```{r example}
+```{r plot examples}
 plot_extreme(result1, title = FALSE)
 plot_specific(result1, window_width = 153, title = TRUE)
 plot_heatmap(result1)
