@@ -11,12 +11,13 @@
 #' the matrix is indicating a window width (row names) and a location in a matrix
 #' of daily sequences of environmental data (column names).
 #'
-#' @param response a data frame with tree-ring proxy variables. Years can be
-#' stored as row names. The first row must represent the most recent year.
-#' @param env_data a data frame of daily sequences of environmental data. Years
-#' can be stored as row names. Each row represents a year and each column
-#' represents a day of a year. The first row must represent the most recent
-#' year.
+#' @param response a data frame with tree-ring proxy variables as columns and
+#' (optional) years as row names. Row.names should be mached with those from a
+#' env_data data frame. If not, warning is given.
+#' @param env_data a data frame of daily sequences of environmental data as
+#' columns and (optional) years as row names. Each row represents a year and each
+#' column represents a day of a year. Row.names should be mached with those from
+#' a response data frame. If not, warning is given.
 #' @param method a string specifying which method to use. Current posibilities
 #' are "cor", "lm" and "brnn".
 #' @param measure a string specifying which measure to use. Current
@@ -44,21 +45,29 @@
 #'
 #' @examples
 #'
-#' data(daily_temperatures_LJ)
-#' data(example_proxies)
+#' data(daily_temperatures_example)
+#' data(example_proxies_1)
+#' oxygen_isotope <- example_proxies_1[, 2]
+#' carbon_isotope <- example_proxies_1[, 3]
 #'
-#' ISO_C <- example_proxies[, 3]
-#' Example1 <- daily_response(response = ISO_C,
-#' env_data = daily_temperatures_LJ, method = "lm", measure = "r.squared",
+#' Example1 <- daily_response(response = carbon_isotope,
+#' env_data = daily_temperatures_example, method = "lm", measure = "r.squared",
 #' lower_limit = 30, upper_limit = 40)
 #'
-#' Example2 <- daily_response(response = example_proxies,
-#' env_data = daily_temperatures_LJ, method = "brnn",
+#' Example2 <- daily_response(response = example_proxies_1,
+#' env_data = daily_temperatures_example, method = "brnn",
 #' measure = "adj.r.squared", fixed_width = 90)
 #'
-#' Example3 <- daily_response(response = ISO_C,
-#' env_data = daily_temperatures_LJ, method = "cor", lower_limit = 60,
+#' Example3 <- daily_response(response = oxygen_isotope,
+#' env_data = daily_temperatures_example, method = "cor", lower_limit = 60,
 #' upper_limit = 100, remove_insignificant = TRUE)
+#'
+#' # Example with negative correlations
+#' data(example_proxies_2)
+#' daily_temperatures_example_subset = daily_temperatures_example[-c(53:55),]
+#' Example4 <- daily_response(response = example_proxies_2,
+#' env_data = daily_temperatures_example_subset, method = "cor",
+#' lower_limit = 30, upper_limit = 40)
 
 daily_response <- function(response, env_data, method = "lm",
                            measure = "r.squared", lower_limit = 30,
@@ -67,7 +76,7 @@ daily_response <- function(response, env_data, method = "lm",
                            brnn_smooth = TRUE, remove_insignificant = TRUE,
                            alpha = .05) {
 
-    #PART 1 - general data arrangements, warnings abd stops
+  # PART 1 - general data arrangements, warnings abd stops
 
   # Both bojects (response and env_data) are converted to data frames
   response <- data.frame(response)
@@ -97,6 +106,14 @@ daily_response <- function(response, env_data, method = "lm",
   if (upper_limit > 365 | upper_limit < 1)
     stop("upper_limit out of bounds! It should be between 1 and 365")
 
+
+  # if row.names of env_data and the response data frames are not equal,
+  # warning is given.
+  if (sum(row.names(env_data) == row.names(response)) != nrow(env_data)){
+    warning("row.names between env_data and response do not match!")
+  }
+
+  # Data manipulation
   # If use.previous == TRUE, env_data data has to be rearranged accordingly
   if (previous_year == TRUE) {
     response <- response[-nrow(response), ]
@@ -381,12 +398,21 @@ daily_response <- function(response, env_data, method = "lm",
     critical_threshold_cor <- critical_r(nrow(response), alpha = alpha)
     critical_threshold_cor2 <- critical_threshold_cor ^ 2
 
-    if (method == "cor") {
-      temporal_matrix[abs(temporal_matrix) < critical_threshold_cor] <- NA
+    # With the following chunk, we need to cosider negative correlations
+    # and threat them separately
+    overall_max <- max(temporal_matrix, na.rm = TRUE)
+    overall_min <- min(temporal_matrix, na.rm = TRUE)
 
-    } else if (method == "lm" | method == "brnn") {
+    # 1 positive correlations
+    if (method == "cor" & (abs(overall_max) > abs(overall_min))) {
+      temporal_matrix[abs(temporal_matrix) < critical_threshold_cor] <- NA
+    # 2 negative correlations
+    } else if (method == "cor" & (abs(overall_max) < abs(overall_min))) {
+      temporal_matrix[temporal_matrix > -critical_threshold_cor] <- NA
+    # 3 lm and brnn method
+      } else if (method == "lm" | method == "brnn") {
       temporal_matrix[temporal_matrix < critical_threshold_cor2] <- NA
-    }
+      }
   }
 
   # PART 4: Final list is being created and returned as a function output

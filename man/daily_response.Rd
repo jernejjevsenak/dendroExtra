@@ -10,13 +10,14 @@ daily_response(response, env_data, method = "lm", measure = "r.squared",
   remove_insignificant = TRUE, alpha = 0.05)
 }
 \arguments{
-\item{response}{a data frame with tree-ring proxy variables. Years can be
-stored as row names. The first row must represent the most recent year.}
+\item{response}{a data frame with tree-ring proxy variables as columns and
+(optional) years as row names. Row.names should be mached with those from a
+env_data data frame. If not, warning is given.}
 
-\item{env_data}{a data frame of daily sequences of environmental data. Years
-can be stored as row names. Each row represents a year and each column
-represents a day of a year. The first row must represent the most recent
-year.}
+\item{env_data}{a data frame of daily sequences of environmental data as
+columns and (optional) years as row names. Each row represents a year and each
+column represents a day of a year. Row.names should be mached with those from
+a response data frame. If not, warning is given.}
 
 \item{method}{a string specifying which method to use. Current posibilities
 are "cor", "lm" and "brnn".}
@@ -66,19 +67,20 @@ of daily sequences of environmental data (column names).
 }
 \examples{
 
-data(daily_temperatures_LJ)
-data(example_proxies)
+data(daily_temperatures_example)
+data(example_proxies_1)
+oxygen_isotope <- example_proxies_1[, 2]
+carbon_isotope <- example_proxies_1[, 3]
 
-ISO_C <- example_proxies[, 3]
-Example1 <- daily_response(response = ISO_C,
-env_data = daily_temperatures_LJ, method = "lm", measure = "r.squared",
+Example1 <- daily_response(response = carbon_isotope,
+env_data = daily_temperatures_example, method = "lm", measure = "r.squared",
 lower_limit = 30, upper_limit = 40)
 
-Example2 <- daily_response(response = example_proxies,
-env_data = daily_temperatures_LJ, method = "brnn",
+Example2 <- daily_response(response = example_proxies_1,
+env_data = daily_temperatures_example, method = "brnn",
 measure = "adj.r.squared", fixed_width = 90)
 
-Example3 <- daily_response(response = ISO_C,
-env_data = daily_temperatures_LJ, method = "cor", lower_limit = 60,
+Example3 <- daily_response(response = oxygen_isotope,
+env_data = daily_temperatures_example, method = "cor", lower_limit = 60,
 upper_limit = 100, remove_insignificant = TRUE)
 }

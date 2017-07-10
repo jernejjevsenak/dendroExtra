@@ -21,15 +21,15 @@ Graphs a lineplot of a row with the highest measure in a matrix, produced by
 }
 \examples{
 
-data(daily_temperatures_LJ)
-data(example_proxies)
-Example1 <- daily_response(response = example_proxies,
-env_data = daily_temperatures_LJ, method = "lm", measure = "r.squared",
+data(daily_temperatures_example)
+data(example_proxies_1)
+Example1 <- daily_response(response = example_proxies_1,
+env_data = daily_temperatures_example, method = "lm", measure = "r.squared",
 fixed_width = 90, previous_year = TRUE)
 plot_extreme(Example1)
 
-Example2 <- daily_response(response = example_proxies,
-env_data = daily_temperatures_LJ, method = "brnn", measure = "adj.r.squared",
+Example2 <- daily_response(response = example_proxies_1,
+env_data = daily_temperatures_example, method = "brnn", measure = "adj.r.squared",
 lower_limit = 50, upper_limit = 55, neurons = 1)
-plot_extreme(Example2, title = FALSE)
+plot_extreme(Example2)
 }

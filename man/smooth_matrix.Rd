@@ -25,10 +25,10 @@ values in a window 3 x 3 around the unrealistic value. Unrealistic value is
 determined by a factor_drop.
 }
 \examples{
-data(daily_temperatures_LJ)
-data(example_proxies)
-Example1 <- daily_response(response = example_proxies,
-env_data = daily_temperatures_LJ, method = "brnn", measure = "r.squared",
+data(daily_temperatures_example)
+data(example_proxies_1)
+Example1 <- daily_response(response = example_proxies_1,
+env_data = daily_temperatures_example, method = "brnn", measure = "r.squared",
 lower = 250, upper = 253, previous_year = FALSE, brnn_smooth = TRUE)
 smoothed <- smooth_matrix(mat = Example1[[1]])
 

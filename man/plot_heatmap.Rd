@@ -18,15 +18,15 @@ Graphs a heatmpat of values stored in a matrix, such as produced
 by \code{\link{daily_response}} function.
 }
 \examples{
-data(daily_temperatures_LJ)
-data(example_proxies)
-Example1 <- daily_response(response = example_proxies,
-env_data = daily_temperatures_LJ, method = "lm", measure = "r.squared",
+data(daily_temperatures_example)
+data(example_proxies_1)
+Example1 <- daily_response(response = example_proxies_1,
+env_data = daily_temperatures_example, method = "lm", measure = "r.squared",
 fixed_width = 90, previous_year = TRUE)
 plot_heatmap(Example1)
 
-Example2 <- daily_response(response = example_proxies,
-env_data = daily_temperatures_LJ, method = "brnn", measure = "adj.r.squared",
-lower_limit = 50, upper_limit = 75, neurons = 1)
+Example2 <- daily_response(response = example_proxies_1,
+env_data = daily_temperatures_example, method = "lm", measure = "adj.r.squared",
+lower_limit = 50, upper_limit = 75)
 plot_heatmap(Example2)
 }

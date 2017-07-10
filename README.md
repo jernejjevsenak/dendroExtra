@@ -23,22 +23,22 @@ This is a basic example which shows you how to use the package:
 ``` r
 ## basic example code
 library(dendroLib)
-data(daily_temperatures_LJ) 
-data(example_proxies)
-result1 <- daily_response(response = example_proxies, env_data = daily_temperatures_LJ, 
-                            method = "lm", measure = "r.squared", lower_limit = 150, upper_limit = 155)
+data(daily_temperatures_example) 
+data(example_proxies_1)
+result1 <- daily_response(response = example_proxies_1, env_data = daily_temperatures_example, 
+                            method = "lm", measure = "r.squared", lower_limit = 90, upper_limit = 150)
 ```
 
-The return of this function is a list with three elements: @calculations, @method, @measure. The return is organized in a way, that can be used by three plotting functions: plot\_extreme(), plot\_specific() and plot\_heatmap(). Function plot\_extreme() graphs a line plot of a row with the highest calculated measure. It indicates the sequence of days, that are the most related to the response variable(s). With plot\_specific(), measures with selected window width are plotted. Function plot\_heatmap() is a visual representation of calculated values.
+This function is computationally intensive and it takes a while to calculate all possible values. Especially, if nonlinear "brnn" method is used. Each calculated value is printed, therefore user can be sure, that algorithm is still calculating. The return of this function is a list with three elements: @calculations, @method, @measure. The return is organized in a way, that can be used by three plotting functions: plot\_extreme(), plot\_specific() and plot\_heatmap(). Function plot\_extreme() graphs a line plot of a row with the highest calculated measure. It indicates the sequence of days, that are the most related to the response variable(s). With plot\_specific(), measures with selected window width are plotted. Function plot\_heatmap() is a visual representation of calculated values.
 
 ``` r
-plot_extreme(result1, title = FALSE)
+plot_extreme(result1, title = TRUE)
 ```
 
 ![](README-plot%20examples-1.png)
 
 ``` r
-plot_specific(result1, window_width = 153, title = TRUE)
+plot_specific(result1, window_width = 100, title = TRUE)
 ```
 
 ![](README-plot%20examples-2.png)
@@ -56,4 +56,4 @@ Authors
 
 ### Collaborators
 
--   I am greatful to my menthor dr. Tom Levanič, who supportes me at my work.
+-   \*\* Prof. dr. Tom Levanič \*\*

@@ -10,16 +10,16 @@
 #' @export
 #'
 #' @examples
-#' data(daily_temperatures_LJ)
-#' data(example_proxies)
-#' Example1 <- daily_response(response = example_proxies,
-#' env_data = daily_temperatures_LJ, method = "lm", measure = "r.squared",
+#' data(daily_temperatures_example)
+#' data(example_proxies_1)
+#' Example1 <- daily_response(response = example_proxies_1,
+#' env_data = daily_temperatures_example, method = "lm", measure = "r.squared",
 #' fixed_width = 90, previous_year = TRUE)
 #' plot_heatmap(Example1)
 #'
-#' Example2 <- daily_response(response = example_proxies,
-#' env_data = daily_temperatures_LJ, method = "brnn", measure = "adj.r.squared",
-#' lower_limit = 50, upper_limit = 75, neurons = 1)
+#' Example2 <- daily_response(response = example_proxies_1,
+#' env_data = daily_temperatures_example, method = "lm", measure = "adj.r.squared",
+#' lower_limit = 50, upper_limit = 75)
 #' plot_heatmap(Example2)
 
 plot_heatmap <- function(result_daily_response){
@@ -83,7 +83,7 @@ plot_heatmap <- function(result_daily_response){
       values = rescale(c(bound1, bound2, bound3, bound4)),
      guide = "colorbar", limits = c(min_limit, max_limit),
      na.value = "white") +
-    xlab("Day of a year") +
+    xlab("Day of Year") +
     ylab("Window Width") +
     scale_x_continuous(expand = c(0, 0)) +
     journal_theme
@@ -107,7 +107,7 @@ plot_heatmap <- function(result_daily_response){
   # is needed
   if (ncol(result_daily_element1) > 366) {
     final_plot <- final_plot +
-      xlab("Day of a Year  (Including Previous Year)")
+      xlab("Day of Year  (Including Previous Year)")
   }
 
   print(final_plot)

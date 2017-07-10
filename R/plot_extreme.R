@@ -12,17 +12,25 @@
 #'
 #' @examples
 #'
-#' data(daily_temperatures_LJ)
-#' data(example_proxies)
-#' Example1 <- daily_response(response = example_proxies,
-#' env_data = daily_temperatures_LJ, method = "lm", measure = "r.squared",
+#' data(daily_temperatures_example)
+#' data(example_proxies_1)
+#' Example1 <- daily_response(response = example_proxies_1,
+#' env_data = daily_temperatures_example, method = "lm", measure = "r.squared",
 #' fixed_width = 90, previous_year = TRUE)
 #' plot_extreme(Example1)
 #'
-#' Example2 <- daily_response(response = example_proxies,
-#' env_data = daily_temperatures_LJ, method = "brnn", measure = "adj.r.squared",
+#' Example2 <- daily_response(response = example_proxies_1,
+#' env_data = daily_temperatures_example, method = "brnn", measure = "adj.r.squared",
 #' lower_limit = 50, upper_limit = 55, neurons = 1)
-#' plot_extreme(Example2, title = FALSE)
+#' plot_extreme(Example2)
+#'
+#' #' # Example with negative correlations
+#' data(example_proxies_2)
+#' daily_temperatures_example_subset = daily_temperatures_example[-c(53:55), ]
+#' Example3 <- daily_response(response = example_proxies_2,
+#' env_data = daily_temperatures_example_subset, method = "cor",
+#' lower_limit = 30, upper_limit = 40)
+#' plot_extreme(Example3)
 
 plot_extreme <- function(result_daily_response, title = TRUE) {
 
@@ -57,13 +65,27 @@ plot_extreme <- function(result_daily_response, title = TRUE) {
     # needed to query the starting day.
     max_result <- suppressWarnings(which.max(apply(result_daily_element1,
       MARGIN = 2, max, na.rm = TRUE)))
-    plot.column <- max_result
+    plot_column <- max_result
     max_index <- which.max(result_daily_element1[, names(max_result)])
     row_index <- row.names(result_daily_element1)[max_index]
     temoporal_vector <- unlist(result_daily_element1[max_index, ])
-    temoporal_vector <- temoporal_vector[!is.na(temoporal_vector)]
     temoporal_vector <- data.frame(temoporal_vector)
-    correlation <- round(max(temoporal_vector), 3)
+    calculated_measure <- round(max(temoporal_vector, na.rm = TRUE), 3)
+
+    # Here we remove missing values at the end of the temporal_vector.
+    # It is important to remove missing values only at the end of the
+    # temporal_vector!
+    row_count <- nrow(temoporal_vector)
+    delete_rows <- 0
+    while (is.na(temoporal_vector[row_count, ] == TRUE)){
+      delete_rows <- delete_rows + 1
+      row_count <-  row_count - 1
+    }
+    # To check if the last row is a missing value
+    if (is.na(temoporal_vector[nrow(temoporal_vector), ] == TRUE)) {
+      temoporal_vector <-  temoporal_vector[-c(row_count:(row_count+delete_rows)),]
+    }
+    temoporal_vector <- data.frame(temoporal_vector)
   }
 
   if ((abs(overall_max) < abs(overall_min)) == TRUE) {
@@ -73,105 +95,126 @@ plot_extreme <- function(result_daily_response, title = TRUE) {
     # needed to query the starting day.
     min_result <- suppressWarnings(which.min(apply(result_daily_element1,
       MARGIN = 2, min, na.rm = TRUE)))
-    plot.column <- min_result
+    plot_column <- min_result
     min_index <- which.min(result_daily_element1[, names(min_result)])
     row_index <- row.names(result_daily_element1)[min_index]
     temoporal_vector <- unlist(result_daily_element1[min_index, ])
     temoporal_vector <- temoporal_vector[!is.na(temoporal_vector)]
     temoporal_vector <- data.frame(temoporal_vector)
-    correlation <- round(min(temoporal_vector), 3)
+    calculated_measure <- round(min(temoporal_vector, na.rm = TRUE), 3)
+
+    # Here we remove missing values at the end of the temporal_vector.
+    # It is important to remove missing values only at the end of the
+    # temporal_vector!
+    row_count <- nrow(temoporal_vector)
+    delete_rows <- 0
+    while (is.na(temoporal_vector[row_count, ] == TRUE)){
+      delete_rows <- delete_rows + 1
+      row_count <-  row_count - 1
+    }
+    # To check if the last row is a missing value
+    if (is.na(temoporal_vector[nrow(temoporal_vector), ] == TRUE)) {
+      temoporal_vector <-  temoporal_vector[-c(row_count:(row_count+delete_rows)),]
+    }
+    temoporal_vector <- data.frame(temoporal_vector)
   }
 
 
   # In case of previous_year == TRUE, we calculate the day of a year
-  # (plot.column), considering 366 days of previous year.
-  if (nrow(temoporal_vector) > 366 & plot.column > 366) {
-    plot.column_extra <- plot.column %% 366
+  # (plot_column), considering 366 days of previous year.
+  if (nrow(temoporal_vector) > 366 & plot_column > 366) {
+    plot_column_extra <- plot_column %% 366
   } else {
-    plot.column_extra <- plot.column
+    plot_column_extra <- plot_column
   }
 
   # The final plot is being created. The first part of a plot is the same,
-  # the second part is different, depending on temporal.vector, plot.column,
+  # the second part is different, depending on temporal.vector, plot_column,
   # method and measure string stored in result_daily_response. The second part
   # defines xlabs, xlabs and ggtitles.
 
   # The definition of theme
   journal_theme <- theme_bw() +
     theme(axis.text = element_text(size = 12, face = "bold"),
-          axis.title = element_text(size = 16), text = element_text(size = 14))
+          axis.title = element_text(size = 16), text = element_text(size = 14),
+          plot.title = element_text(size=12,  face='bold'))
 
   if (title == FALSE){
     journal_theme <- journal_theme +
       theme(plot.title = element_blank())
   }
 
-  final_plot <- ggplot(temoporal_vector, aes(y = temoporal_vector,
+  # in the next chunk, warnings are supressed. At the end of the vector,
+  # there are always missing values, which are a result of changing window
+  # width calclulations. Those warnings are not important and do not affect
+  # our results at all
+  final_plot <- suppressWarnings(
+  ggplot(temoporal_vector, aes(y = temoporal_vector,
     x = seq(1, length(temoporal_vector)))) + geom_line(lwd = 1.2) +
-     geom_vline(xintercept = plot.column, col = "red") +
+     geom_vline(xintercept = plot_column, col = "red") +
      scale_x_continuous(breaks = sort(c(seq(0, nrow(temoporal_vector), 50),
-       plot.column), decreasing = FALSE),
-       labels = sort(c(seq(0, nrow(temoporal_vector), 50), plot.column))) +
-       annotate("label", label = as.character(correlation),
-         y = correlation, x = plot.column + 15) +
-    journal_theme
+       plot_column), decreasing = FALSE),
+       labels = sort(c(seq(0, nrow(temoporal_vector), 50), plot_column))) +
+       annotate("label", label = as.character(calculated_measure),
+         y = calculated_measure, x = plot_column + 15) +
+    journal_theme)
 
-  if ((nrow(temoporal_vector) > 366) &&  (plot.column > 366) &&
+  if ((nrow(temoporal_vector) > 366) &&  (plot_column > 366) &&
       (result_daily_response [[2]] == "cor")) {
     final_plot <- final_plot +
-      ggtitle(paste("The highest correlation coefficient is ",
-        "calculated with window width of",
-        as.numeric(row_index), "days, starting on day",
-        plot.column_extra, "of current year")) +
-      xlab("Day of a Year  (Including Previous Year)") +
+      ggtitle(paste("Maximal correlation coefficient:", calculated_measure,
+                    "\nOptimal window width:", as.numeric(row_index), "days",
+                    "\nStarting day of optimal window width: day",  plot_column_extra,
+                    "of current year")) +
+      xlab("Day of Year  (Including Previous Year)") +
       ylab("Correlation Coefficient")
     }
 
-  if ((nrow(temoporal_vector) > 366) &&  (plot.column < 366) &&
+  if ((nrow(temoporal_vector) > 366) &&  (plot_column < 366) &&
       (result_daily_response [[2]] == "cor")) {
     final_plot <- final_plot +
-      ggtitle(paste("The highest correlation coefficient is ",
-        "calculated with window width of",
-        as.numeric(row_index), "days, starting on day",
-        plot.column_extra, "of previous year")) +
-      xlab("Day of a Year  (Including Previous Year)") +
+      ggtitle(paste("Maximal correlation coefficient:", calculated_measure,
+                    "\nOptimal window width:", as.numeric(row_index), "days",
+                    "\nStarting day of optimal window width: day",  plot_column_extra,
+                    "of previous year")) +
+      xlab("Day of Year (Including Previous Year)") +
       ylab("Correlation Coefficient")
     }
 
   if ((nrow(temoporal_vector) < 366) &&
       (result_daily_response [[2]] == "cor")) {
     final_plot <- final_plot +
-      ggtitle(paste("The highest correlation coefficient is ",
-        "calculated with window width of",
-        as.numeric(row_index), "days, starting on day",  plot.column)) +
-      xlab("Day of a Year") +
+      ggtitle(paste("Maximal correlation coefficient:", calculated_measure,
+                    "\nOptimal window width:", as.numeric(row_index), "days",
+                    "\nStarting day of optimal window width: day",  plot_column)) +
+      xlab("Day of Year") +
       ylab("Correlation Coefficient")
   }
 
   # plot for lm and brnn method; using r.squared
-  if ((nrow(temoporal_vector) > 366) &&  (plot.column > 366) &&
+  if ((nrow(temoporal_vector) > 366) &&  (plot_column > 366) &&
       ((result_daily_response [[2]] == "lm") |
           (result_daily_response [[2]] == "brnn")) &&
       (result_daily_response [[3]] == "r.squared")) {
     final_plot <- final_plot +
-      ggtitle(paste("The highest explained variance is ",
-        "calculated with window width of",
-        as.numeric(row_index), "days, starting on day",
-        plot.column_extra, "of current year")) +
-      xlab("Day of a Year  (Including Previous Year)") +
+      ggtitle(paste("Maximal R squared:", calculated_measure,
+                    "\nOptimal window width:", as.numeric(row_index), "days",
+                    "\nStarting day of optimal window width: day",  plot_column_extra,
+                    "of current year")) +
+      xlab("Day of Year (Including Previous Year)") +
       ylab("Explained Variance")
   }
 
-  if ((nrow(temoporal_vector) > 366) && (plot.column < 366) &&
+  if ((nrow(temoporal_vector) > 366) && (plot_column < 366) &&
      (result_daily_response[[2]] == "lm" |
           result_daily_response[[2]] == "brnn") &&
       result_daily_response[[3]] == "r.squared") {
     final_plot <- final_plot +
-      ggtitle(paste("The highest explained variance is ",
-        "calculated with window width of",
-        as.numeric(row_index), "days, starting on day",
-        plot.column_extra, "of previous year")) +
-      xlab("Day of a Year  (Including Previous Year)") +
+      ggtitle(paste("Maximal R squared:", calculated_measure,
+                    "\nOptimal window width:", as.numeric(row_index), "days",
+                    "\nStarting day of optimal window width: day",  plot_column_extra,
+                    "of previous year")) +
+      xlab("Day of Year (Including Previous Year)") +
       ylab("Explained Variance")
   }
 
@@ -180,37 +223,37 @@ plot_extreme <- function(result_daily_response, title = TRUE) {
           result_daily_response[[2]] == "brnn") &&
       result_daily_response[[3]] == "r.squared") {
     final_plot <- final_plot +
-      ggtitle(paste("The highest explained variance is ",
-        "calculated with window width of",
-        as.numeric(row_index), "days, starting on day",  plot.column)) +
-      xlab("Day of a Year") +
+      ggtitle(paste("Maximal R squared:", calculated_measure,
+                    "\nOptimal window width:", as.numeric(row_index), "days",
+                    "\nStarting day of optimal window width:  day",  plot_column)) +
+      xlab("Day of Year") +
       ylab("Explained Variance")
   }
 
   # plot for lm and brnn method; using adj.r.squared
-  if ((nrow(temoporal_vector) > 366) && (plot.column > 366) &&
+  if ((nrow(temoporal_vector) > 366) && (plot_column > 366) &&
      (result_daily_response[[2]] == "lm" |
           result_daily_response[[2]] == "brnn") &&
       (result_daily_response[[3]] == "adj.r.squared")) {
     final_plot <- final_plot +
-      ggtitle(paste("The highest adjusted explained variance is ",
-        "calculated with window width of",
-        as.numeric(row_index), "days, starting on day",
-        plot.column_extra, "of current year")) +
-      xlab("Day of a Year  (Including Previous Year)") +
+      ggtitle(paste("Maximal Adjusted R squared:", calculated_measure,
+                    "\nOptimal window width:", as.numeric(row_index), "days",
+                    "\nStarting day of optimal window width: day",  plot_column_extra,
+                    "of current year")) +
+      xlab("Day of Year (Including Previous Year)") +
       ylab("Adjusted Explained Variance")
   }
 
-  if ((nrow(temoporal_vector) > 366) &&  (plot.column < 366) &&
+  if ((nrow(temoporal_vector) > 366) &&  (plot_column < 366) &&
       ((result_daily_response [[2]] == "lm" |
           result_daily_response [[2]] == "brnn")) &&
       (result_daily_response [[3]] == "adj.r.squared")) {
     final_plot <- final_plot +
-      ggtitle(paste("The highest adjusted explained variance is ",
-        "calculated with window width of",
-        as.numeric(row_index), "days, starting on day",
-        plot.column_extra, "of previous year")) +
-      xlab("Day of a Year  (Including Previous Year)") +
+      ggtitle(paste("Maximal Adjusted R squared:", calculated_measure,
+                    "\nOptimal window width: day", as.numeric(row_index), "days",
+                    "\nStarting day of optimal window width:",  plot_column_extra,
+                    "of previous year")) +
+      xlab("Day of Year (Including Previous Year)") +
       ylab("Adjusted Explained Variance")
   }
 
@@ -219,10 +262,10 @@ plot_extreme <- function(result_daily_response, title = TRUE) {
           result_daily_response [[2]] == "brnn") &&
       (result_daily_response [[3]] == "adj.r.squared")) {
     final_plot <- final_plot +
-      ggtitle(paste("The highest adjusted explained variance is ",
-        "calculated with window width of",
-        as.numeric(row_index), "days, starting on day",  plot.column)) +
-      xlab("Day of a Year") +
+      ggtitle(paste("Maximal Adjusted R squared:", calculated_measure,
+                    "\nOptimal window width:", as.numeric(row_index), "days",
+                    "\nStarting day of optimal window width: day",  plot_column)) +
+      xlab("Day of Year") +
       ylab("Adjusted Explained Variance")
   }
 

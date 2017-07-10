@@ -1,7 +1,7 @@
 #' Daily mean temperatures for Ljubljana from 2015 - 1961
 #'
 #' A dataset of daily mean temperatures in Ljubljana (Slovenia). The first row
-#' represents temperatures in 20151. The first column represents the first day
+#' represents temperatures in 1961. The first column represents the first day
 #' of a year, the second column represents the second day of a year, etc.
 #'
 #' @format A data frame with 55 rows and 366 variables:
@@ -375,4 +375,4 @@
 #' }
 #' @source \url{http://meteo.arso.gov.si/met/sl/archive/}
 #' @export
-"daily_temperatures_LJ"
+"daily_temperatures_example"
