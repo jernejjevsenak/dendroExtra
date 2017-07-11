@@ -7,17 +7,17 @@
 #' environmental data. Window width could be fixed (use fixed_width) or
 #' variable width (use lower_limit and upper_limit arguments). In this case,
 #' all window widths between lower and upper limit will be used. All calculated
-#' measures are stored in a matrix. The location of stored calculated measure in
-#' the matrix is indicating a window width (row names) and a location in a matrix
-#' of daily sequences of environmental data (column names).
+#' measures are stored in a matrix. The location of stored calculated measure
+#' in the matrix is indicating a window width (row names) and a location in a
+#' matrix of daily sequences of environmental data (column names).
 #'
 #' @param response a data frame with tree-ring proxy variables as columns and
 #' (optional) years as row names. Row.names should be mached with those from a
 #' env_data data frame. If not, warning is given.
 #' @param env_data a data frame of daily sequences of environmental data as
-#' columns and (optional) years as row names. Each row represents a year and each
-#' column represents a day of a year. Row.names should be mached with those from
-#' a response data frame. If not, warning is given.
+#' columns and (optional) years as row names. Each row represents a year and
+#' each column represents a day of a year. Row.names should be mached with
+#' those from a response data frame. If not, warning is given.
 #' @param method a string specifying which method to use. Current posibilities
 #' are "cor", "lm" and "brnn".
 #' @param measure a string specifying which measure to use. Current
@@ -39,6 +39,10 @@
 #' "brnn" method, squared threshold is used, which corresponds to R squared
 #' statistics.
 #' @param alpha significance level used to remove insignificant calculations.
+#' @param row_names_subset if set to TRUE, row.names are used to subset
+#' env_data and response data frames. Only years from both data frames are
+#' kept.
+#'
 #' @return a list with three elements: @calculations, @method, @measure
 #'
 #' @export
@@ -47,8 +51,9 @@
 #'
 #' data(daily_temperatures_example)
 #' data(example_proxies_1)
-#' oxygen_isotope <- example_proxies_1[, 2]
-#' carbon_isotope <- example_proxies_1[, 3]
+#' library(dplyr)
+#' oxygen_isotope <- select(example_proxies_1, O)
+#' carbon_isotope <- select(example_proxies_1, C)
 #'
 #' Example1 <- daily_response(response = carbon_isotope,
 #' env_data = daily_temperatures_example, method = "lm", measure = "r.squared",
@@ -62,19 +67,18 @@
 #' env_data = daily_temperatures_example, method = "cor", lower_limit = 60,
 #' upper_limit = 100, remove_insignificant = TRUE)
 #'
-#' # Example with negative correlations
+#' # Example with negative correlations. Data frames are automatically subset.
 #' data(example_proxies_2)
-#' daily_temperatures_example_subset = daily_temperatures_example[-c(53:55),]
 #' Example4 <- daily_response(response = example_proxies_2,
-#' env_data = daily_temperatures_example_subset, method = "cor",
-#' lower_limit = 30, upper_limit = 40)
+#' env_data = daily_temperatures_example, method = "cor",
+#' lower_limit = 30, upper_limit = 40, row_names_subset = TRUE)
 
 daily_response <- function(response, env_data, method = "lm",
                            measure = "r.squared", lower_limit = 30,
                            upper_limit = 270, fixed_width = 0,
                            previous_year = FALSE, neurons = 2,
                            brnn_smooth = TRUE, remove_insignificant = TRUE,
-                           alpha = .05) {
+                           alpha = .05, row_names_subset = FALSE) {
 
   # PART 1 - general data arrangements, warnings abd stops
 
@@ -82,9 +86,10 @@ daily_response <- function(response, env_data, method = "lm",
   response <- data.frame(response)
   env_data <- data.frame(env_data)
 
-  # For measure calculations, both objects need to have the same length
+  # For measure calculations, both objects need to have the same length,
+  # with the exception, when row_names_subset is set to TRUE
   # Stop message in case both data frames do not have the same length
-  if (nrow(response) !=  nrow(env_data))
+  if (nrow(response) !=  nrow(env_data) & row_names_subset == FALSE)
     stop("Length of env_data and response records differ")
 
   # Stop message if fixed_width is not between 0 and 365
@@ -106,11 +111,41 @@ daily_response <- function(response, env_data, method = "lm",
   if (upper_limit > 365 | upper_limit < 1)
     stop("upper_limit out of bounds! It should be between 1 and 365")
 
+  # If row_names_subset == TRUE, data is subseted and ordered based on matching
+  # row.names. Additionally, number of characters in row.names is checked.
+  # There should be at least three characters (assuming years before 100 will
+  # never be analysed, there is no such environmental data avaliable)
+  if (row_names_subset == TRUE & nchar(row.names(env_data)[1]) >= 3){
+
+    ncol_response <- ncol(response)
+
+    colnames_response <- colnames(response)
+
+    env_data$year <- row.names(env_data)
+    response$year <- row.names(response)
+
+    temporal_data <- merge(response, env_data, by = "year")
+
+    response <- data.frame(temporal_data[, c(2:(1 + ncol_response))],
+                           row.names = temporal_data$year)
+    colnames(response) <- colnames_response
+
+    env_data <- data.frame(temporal_data[, c((1 + ncol_response + 1):
+                                               ncol(temporal_data))],
+                           row.names = temporal_data$year)
+  }
 
   # if row.names of env_data and the response data frames are not equal,
   # warning is given.
-  if (sum(row.names(env_data) == row.names(response)) != nrow(env_data)){
+  if (sum(row.names(env_data) == row.names(response)) != nrow(env_data)) {
     warning("row.names between env_data and response do not match!")
+  }
+
+  # If row_names_subset == TRUE, but row.names does not appear to be years,
+  # error is given.
+  if (row_names_subset == TRUE & nchar(row.names(env_data)[1]) < 3){
+    stop(paste("row.names does not appear to be years!",
+                "At least three characters needed!"))
   }
 
   # Data manipulation

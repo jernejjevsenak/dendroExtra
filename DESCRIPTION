@@ -1,8 +1,8 @@
 Package: dendroLib
 Type: Package
-Title: Library with nonlinear methods for analyzing dendroclimatological data 
+Title: Library with Nonlinear Methods for Analyzing Dendroclimatological Data
 Version: 0.0.1
-Author: Jernej Jevsenak [aut, cre, cph], Tom Levanič [cph]
+Author: Jernej Jevsenak [aut, cre, cph], Tom Levanic [cph]
 Maintainer: Jernej Jevsenak <jernej.jevsenak@gmail.com>
 Description: Library that implements novel dendroclimatological
     methods, primarily used by the Tree-ring research community. Functions are
@@ -15,7 +15,7 @@ URL: http://github.com/jernejjevsenak/dendroLib
 BugReports: http://github.com/jernejjevsenak/dendroLib/issues
 Encoding: UTF-8
 LazyData: true
-Suggests: testthat
+Suggests: testthat, dplyr, dplR
 RoxygenNote: 6.0.1
 Imports: ggplot2 (>= 2.2.0), brnn (>= 0.6), reshape2 (>= 1.4.2), oce (>= 0.9-21), 
     stats (>= 3.4.0), scales (>= 0.4.1), Formula (>= 1.2-1)

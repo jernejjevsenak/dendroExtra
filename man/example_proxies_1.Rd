@@ -20,7 +20,7 @@ example_proxies_1
 \description{
 A dataset with three tree-ring proxy records from a site near Ljubljana
 (Slovenia). The first row represents a value of a year in 1961. The three
-proxy records are MVA (Mean vessel area [mm ^2]), O (stable oxygen isotope ratios)
-and C (stable carbon isotope ratios)
+proxy records are MVA (Mean vessel area [mm ^2]), O (stable oxygen isotope
+ratios) and C (stable carbon isotope ratios)
 }
 \keyword{datasets}

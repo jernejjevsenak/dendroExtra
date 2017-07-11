@@ -26,7 +26,7 @@ fixed_width = 90, previous_year = TRUE)
 plot_heatmap(Example1)
 
 Example2 <- daily_response(response = example_proxies_1,
-env_data = daily_temperatures_example, method = "lm", measure = "adj.r.squared",
-lower_limit = 50, upper_limit = 75)
+env_data = daily_temperatures_example, method = "lm",
+measure = "adj.r.squared", lower_limit = 50, upper_limit = 75)
 plot_heatmap(Example2)
 }

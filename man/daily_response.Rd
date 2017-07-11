@@ -7,7 +7,7 @@
 daily_response(response, env_data, method = "lm", measure = "r.squared",
   lower_limit = 30, upper_limit = 270, fixed_width = 0,
   previous_year = FALSE, neurons = 2, brnn_smooth = TRUE,
-  remove_insignificant = TRUE, alpha = 0.05)
+  remove_insignificant = TRUE, alpha = 0.05, row_names_subset = FALSE)
 }
 \arguments{
 \item{response}{a data frame with tree-ring proxy variables as columns and
@@ -15,9 +15,9 @@ daily_response(response, env_data, method = "lm", measure = "r.squared",
 env_data data frame. If not, warning is given.}
 
 \item{env_data}{a data frame of daily sequences of environmental data as
-columns and (optional) years as row names. Each row represents a year and each
-column represents a day of a year. Row.names should be mached with those from
-a response data frame. If not, warning is given.}
+columns and (optional) years as row names. Each row represents a year and
+each column represents a day of a year. Row.names should be mached with
+those from a response data frame. If not, warning is given.}
 
 \item{method}{a string specifying which method to use. Current posibilities
 are "cor", "lm" and "brnn".}
@@ -49,6 +49,10 @@ the significant threshold level, based on a selected alpha. For "lm" and
 statistics.}
 
 \item{alpha}{significance level used to remove insignificant calculations.}
+
+\item{row_names_subset}{if set to TRUE, row.names are used to subset
+env_data and response data frames. Only years from both data frames are
+kept.}
 }
 \value{
 a list with three elements: @calculations, @method, @measure
@@ -61,16 +65,17 @@ arguments: window width and a location in a matrix of daily sequences of
 environmental data. Window width could be fixed (use fixed_width) or
 variable width (use lower_limit and upper_limit arguments). In this case,
 all window widths between lower and upper limit will be used. All calculated
-measures are stored in a matrix. The location of stored calculated measure in
-the matrix is indicating a window width (row names) and a location in a matrix
-of daily sequences of environmental data (column names).
+measures are stored in a matrix. The location of stored calculated measure
+in the matrix is indicating a window width (row names) and a location in a
+matrix of daily sequences of environmental data (column names).
 }
 \examples{
 
 data(daily_temperatures_example)
 data(example_proxies_1)
-oxygen_isotope <- example_proxies_1[, 2]
-carbon_isotope <- example_proxies_1[, 3]
+library(dplyr)
+oxygen_isotope <- select(example_proxies_1, O)
+carbon_isotope <- select(example_proxies_1, C)
 
 Example1 <- daily_response(response = carbon_isotope,
 env_data = daily_temperatures_example, method = "lm", measure = "r.squared",
@@ -83,4 +88,10 @@ measure = "adj.r.squared", fixed_width = 90)
 Example3 <- daily_response(response = oxygen_isotope,
 env_data = daily_temperatures_example, method = "cor", lower_limit = 60,
 upper_limit = 100, remove_insignificant = TRUE)
+
+# Example with negative correlations. Data frames are automatically subset.
+data(example_proxies_2)
+Example4 <- daily_response(response = example_proxies_2,
+env_data = daily_temperatures_example, method = "cor",
+lower_limit = 30, upper_limit = 40, row_names_subset = TRUE)
 }

@@ -28,8 +28,9 @@ determined by a factor_drop.
 data(daily_temperatures_example)
 data(example_proxies_1)
 Example1 <- daily_response(response = example_proxies_1,
-env_data = daily_temperatures_example, method = "brnn", measure = "r.squared",
-lower = 250, upper = 253, previous_year = FALSE, brnn_smooth = TRUE)
+env_data = daily_temperatures_example, method = "brnn",
+measure = "r.squared", lower = 250, upper = 253,
+previous_year = FALSE, brnn_smooth = TRUE)
 smoothed <- smooth_matrix(mat = Example1[[1]])
 
 mat_1 <-  matrix(seq(1.01, 2, by = 0.01)  , ncol = 10, byrow = TRUE)

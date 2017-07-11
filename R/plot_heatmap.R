@@ -18,8 +18,8 @@
 #' plot_heatmap(Example1)
 #'
 #' Example2 <- daily_response(response = example_proxies_1,
-#' env_data = daily_temperatures_example, method = "lm", measure = "adj.r.squared",
-#' lower_limit = 50, upper_limit = 75)
+#' env_data = daily_temperatures_example, method = "lm",
+#' measure = "adj.r.squared", lower_limit = 50, upper_limit = 75)
 #' plot_heatmap(Example2)
 
 plot_heatmap <- function(result_daily_response){
@@ -40,7 +40,8 @@ plot_heatmap <- function(result_daily_response){
 
   # Data manipulation. The goal of this part is to prepare data for ggplot
   result_daily_element1$temp_row_names <- row.names(result_daily_element1)
-  result_daily_element1_melted <- melt(result_daily_element1, id.vars = "temp_row_names")
+  result_daily_element1_melted <- melt(result_daily_element1,
+                                       id.vars = "temp_row_names")
 
   # colname is changed, for a more sufficient plotting
   colnames(result_daily_element1_melted)[3] <- "Value"
