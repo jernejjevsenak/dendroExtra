@@ -12,13 +12,13 @@
 #' matrix of daily sequences of environmental data (column names).
 #'
 #' @param response a data frame with tree-ring proxy variables as columns and
-#' (optional) years as row names. Row.names should be mached with those from a
+#' (optional) years as row names. Row.names should be matched with those from a
 #' env_data data frame. If not, set row_names_subset = TRUE.
 #' @param env_data a data frame of daily sequences of environmental data as
 #' columns and (optional) years as row names. Each row represents a year and
-#' each column represents a day of a year. Row.names should be mached with
+#' each column represents a day of a year. Row.names should be matched with
 #' those from a response data frame. If not, set row_names_subset = TRUE.
-#' @param method a string specifying which method to use. Current posibilities
+#' @param method a string specifying which method to use. Current possibilities
 #' are "cor", "lm" and "brnn".
 #' @param measure a string specifying which measure to use. Current
 #' possibilities are "r.squared" and "adj.r.squared". If method = "cor",
@@ -32,7 +32,7 @@
 #' selected statistical measure.
 #' @param neurons positive integer that indicates the number of neurons used
 #'  for brnn method
-#' @param brnn_smooth if set to TRUE, a smoothing algorithm is applied, that
+#' @param brnn_smooth if set to TRUE, a smoothing algorithm is applied that
 #' removes unrealistic calculations which are a result of neural net failure.
 #' @param remove_insignificant if set to TRUE, removes all correlations bellow
 #' the significant threshold level, based on a selected alpha. For "lm" and

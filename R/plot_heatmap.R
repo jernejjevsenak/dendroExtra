@@ -1,6 +1,6 @@
 #' plot_heatmap
 #'
-#' Graphs a heatmpat of values stored in a matrix, such as produced
+#' Graphs a heatmap of values stored in a matrix, such as produced
 #' by \code{\link{daily_response}} function.
 #'
 #' @param result_daily_response a list with three objects as produced by

@@ -1,6 +1,6 @@
 #' plot_extreme
 #'
-#' Graphs a lineplot of a row with the highest measure in a matrix, produced by
+#' Graphs a line plot of a row with the highest measure in a matrix, produced by
 #' \code{\link{daily_response}} function.
 #'
 #' @param result_daily_response a list with three objects as produced by

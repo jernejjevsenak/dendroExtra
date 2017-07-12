@@ -1,11 +1,11 @@
 #' plot_specific
 #'
-#' Graphs a lineplot of a row with a selected window width in a matrix,
+#' Graphs a line plot of a row with a selected window width in a matrix,
 #' produced by \code{\link{daily_response}} function.
 #'
 #' @param result_daily_response a list with three objects as produced by
 #' daily_response function
-#' @param window_width intiger representing window width to be displayed
+#' @param window_width integer representing window width to be displayed
 #' @param title logical, if set to FALSE, no plot title is displayed
 #'
 #' @return A ggplot2 object containing the plot display

@@ -11,7 +11,7 @@
 #'   \item{O}{Stable oxygen isotope ratios from 2015 - 1961}
 #'   \item{C}{Stable carbon isotope ratios from 2015 - 1961}
 #' }
-#' @source prof. dr. Tom Levanič, Slovenian Forestry Institute, Vecna pot 2,
+#' @source prof. dr. Tom Levanic, Slovenian Forestry Institute, Vecna pot 2,
 #' Ljubljana, Slovenia
 #' @export
 "example_proxies_1"

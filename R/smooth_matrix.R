@@ -8,7 +8,7 @@
 #' @param factor_drop a number that specifies by how many % should a value drop,
 #' comparing to two the closest values in a row (i +1 and i -1), to be
 #' considered as a unrealistic value.
-#' @param repeats an intiger that specifies number of repeats of smoothing.
+#' @param repeats an integer that specifies number of repeats of smoothing.
 #' Important when there are more unrealistic values one by another.
 #'
 #' @return a matrix with replaced unrealistic values
