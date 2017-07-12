@@ -13,7 +13,7 @@ smooth_matrix(mat, factor_drop = 0.7, repeats = 3)
 comparing to two the closest values in a row (i +1 and i -1), to be
 considered as a unrealistic value.}
 
-\item{repeats}{an intiger that specifies number of repeats of smoothing.
+\item{repeats}{an integer that specifies number of repeats of smoothing.
 Important when there are more unrealistic values one by another.}
 }
 \value{

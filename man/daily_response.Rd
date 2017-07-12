@@ -11,15 +11,15 @@ daily_response(response, env_data, method = "lm", measure = "r.squared",
 }
 \arguments{
 \item{response}{a data frame with tree-ring proxy variables as columns and
-(optional) years as row names. Row.names should be mached with those from a
+(optional) years as row names. Row.names should be matched with those from a
 env_data data frame. If not, set row_names_subset = TRUE.}
 
 \item{env_data}{a data frame of daily sequences of environmental data as
 columns and (optional) years as row names. Each row represents a year and
-each column represents a day of a year. Row.names should be mached with
+each column represents a day of a year. Row.names should be matched with
 those from a response data frame. If not, set row_names_subset = TRUE.}
 
-\item{method}{a string specifying which method to use. Current posibilities
+\item{method}{a string specifying which method to use. Current possibilities
 are "cor", "lm" and "brnn".}
 
 \item{measure}{a string specifying which measure to use. Current
@@ -40,7 +40,7 @@ selected statistical measure.}
 \item{neurons}{positive integer that indicates the number of neurons used
 for brnn method}
 
-\item{brnn_smooth}{if set to TRUE, a smoothing algorithm is applied, that
+\item{brnn_smooth}{if set to TRUE, a smoothing algorithm is applied that
 removes unrealistic calculations which are a result of neural net failure.}
 
 \item{remove_insignificant}{if set to TRUE, removes all correlations bellow

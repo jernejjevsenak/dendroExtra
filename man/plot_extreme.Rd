@@ -16,7 +16,7 @@ daily_response function}
 A ggplot2 object containing the plot display
 }
 \description{
-Graphs a lineplot of a row with the highest measure in a matrix, produced by
+Graphs a line plot of a row with the highest measure in a matrix, produced by
 \code{\link{daily_response}} function.
 }
 \examples{

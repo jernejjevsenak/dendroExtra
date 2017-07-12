@@ -14,7 +14,7 @@ plot_heatmap(result_daily_response)
 A ggplot2 object containing the heatmap display
 }
 \description{
-Graphs a heatmpat of values stored in a matrix, such as produced
+Graphs a heatmap of values stored in a matrix, such as produced
 by \code{\link{daily_response}} function.
 }
 \examples{

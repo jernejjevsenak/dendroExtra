@@ -10,7 +10,7 @@ plot_specific(result_daily_response, window_width, title = TRUE)
 \item{result_daily_response}{a list with three objects as produced by
 daily_response function}
 
-\item{window_width}{intiger representing window width to be displayed}
+\item{window_width}{integer representing window width to be displayed}
 
 \item{title}{logical, if set to FALSE, no plot title is displayed}
 }
@@ -18,7 +18,7 @@ daily_response function}
 A ggplot2 object containing the plot display
 }
 \description{
-Graphs a lineplot of a row with a selected window width in a matrix,
+Graphs a line plot of a row with a selected window width in a matrix,
 produced by \code{\link{daily_response}} function.
 }
 \examples{
