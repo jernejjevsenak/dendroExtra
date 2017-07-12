@@ -54,5 +54,5 @@ plot_heatmap(result1)
 ## Authors
 * **Jernej Jevšenak**
 
-### Collaborators
+## Collaborators
 * **Prof. dr. Tom Levanič**

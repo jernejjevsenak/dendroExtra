@@ -4,7 +4,6 @@ import(brnn)
 import(reshape2)
 import(oce)
 import(stats)
-import(Formula)
 importFrom(scales, pretty_breaks)
 
 export(daily_response)

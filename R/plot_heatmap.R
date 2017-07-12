@@ -90,13 +90,13 @@ plot_heatmap <- function(result_daily_response){
     journal_theme
 
   # Scale_y_continuous is added separately. When there is only a few  rows
-  # e.g. fixed_width = TRUE, breaks are specified separately, otherwise,
-  # default wavier is used.
+  # e.g. fixed_width = TRUE, breaks are specified separately
 
   if (nrow(result_daily_element1) < 5) {
     final_plot <- final_plot +
       scale_y_continuous(expand = c(0, 0),
-                         breaks = pretty_breaks())
+                         breaks = pretty_breaks(n =
+                                  nrow(result_daily_element1)))
   } else {
     final_plot <- final_plot +
       scale_y_continuous(expand = c(0, 0),

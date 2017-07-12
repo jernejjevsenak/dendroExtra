@@ -30,14 +30,6 @@ expect_is(test3[[1]], "matrix")
 expect_is(test3[[2]], "character")
 expect_is(test3[[2]], "character")
 
-# All ggplots should be of a class list
-plot1 <- plot_extreme(test3)
-plot2 <- plot_heatmap(test3)
-plot3 <- plot_specific(test3, window_width = 252)
-
-expect_is(plot1, "list")
-expect_is(plot2, "list")
-
 
 # stop functions were included to prevent wrong results
 expect_error(daily_response(response = carbon_isotope,

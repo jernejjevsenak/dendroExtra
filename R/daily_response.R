@@ -13,11 +13,11 @@
 #'
 #' @param response a data frame with tree-ring proxy variables as columns and
 #' (optional) years as row names. Row.names should be mached with those from a
-#' env_data data frame. If not, warning is given.
+#' env_data data frame. If not, set row_names_subset = TRUE.
 #' @param env_data a data frame of daily sequences of environmental data as
 #' columns and (optional) years as row names. Each row represents a year and
 #' each column represents a day of a year. Row.names should be mached with
-#' those from a response data frame. If not, warning is given.
+#' those from a response data frame. If not, set row_names_subset = TRUE.
 #' @param method a string specifying which method to use. Current posibilities
 #' are "cor", "lm" and "brnn".
 #' @param measure a string specifying which measure to use. Current

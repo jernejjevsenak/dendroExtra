@@ -54,6 +54,7 @@ Authors
 
 -   **Jernej Jevšenak**
 
-### Collaborators
+Collaborators
+-------------
 
--   \*\* Prof. dr. Tom Levanič \*\*
+-   **Prof. dr. Tom Levanič**
