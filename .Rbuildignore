@@ -9,5 +9,4 @@
 ^README\.md$
 ^README\.Rmd$
 ^README-.*\.png$
-^NEWS\.md$
 ^revdep$
