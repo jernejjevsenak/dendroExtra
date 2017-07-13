@@ -48,7 +48,7 @@
 #' @export
 #'
 #' @examples
-#'
+#' \dontrun{
 #' data(daily_temperatures_example)
 #' data(example_proxies_1)
 #' library(dplyr)
@@ -57,7 +57,7 @@
 #'
 #' Example1 <- daily_response(response = carbon_isotope,
 #' env_data = daily_temperatures_example, method = "lm", measure = "r.squared",
-#' lower_limit = 30, upper_limit = 40)
+#' lower_limit = 100, upper_limit = 104)
 #'
 #' Example2 <- daily_response(response = example_proxies_1,
 #' env_data = daily_temperatures_example, method = "brnn",
@@ -65,13 +65,14 @@
 #'
 #' Example3 <- daily_response(response = oxygen_isotope,
 #' env_data = daily_temperatures_example, method = "cor", lower_limit = 60,
-#' upper_limit = 100, remove_insignificant = TRUE)
+#' upper_limit = 70, remove_insignificant = TRUE)
 #'
 #' # Example with negative correlations. Data frames are automatically subset.
 #' data(example_proxies_2)
 #' Example4 <- daily_response(response = example_proxies_2,
 #' env_data = daily_temperatures_example, method = "cor",
 #' lower_limit = 30, upper_limit = 40, row_names_subset = TRUE)
+#' }
 
 daily_response <- function(response, env_data, method = "lm",
                            measure = "r.squared", lower_limit = 30,

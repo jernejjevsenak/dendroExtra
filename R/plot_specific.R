@@ -12,7 +12,7 @@
 #' @export
 #'
 #' @examples
-#'
+#' \dontrun{
 #' data(daily_temperatures_example)
 #' data(example_proxies_1)
 #' Example1 <- daily_response(response = example_proxies_1,
@@ -25,6 +25,7 @@
 #' measure = "adj.r.squared", lower_limit = 150, upper_limit = 155,
 #' neurons = 1)
 #' plot_specific(Example2, window_width = 153, title = TRUE)
+#' }
 
 plot_specific <- function(result_daily_response, window_width, title = TRUE) {
 

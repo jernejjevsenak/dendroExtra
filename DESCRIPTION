@@ -2,7 +2,7 @@ Package: dendroLib
 Type: Package
 Title: Library with Nonlinear Methods for Analyzing Dendroclimatological Data
 Version: 0.0.1
-Author: Jernej Jevsenak [aut, cre, cph], Tom Levanic [cph]
+Author: Jernej Jevsenak [aut, cre], Tom Levanic [ctb]
 Maintainer: Jernej Jevsenak <jernej.jevsenak@gmail.com>
 Description: Library that implements novel dendroclimatological
     methods, primarily used by the Tree-ring research community. Functions are

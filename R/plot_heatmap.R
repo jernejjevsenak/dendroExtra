@@ -10,6 +10,7 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' data(daily_temperatures_example)
 #' data(example_proxies_1)
 #' Example1 <- daily_response(response = example_proxies_1,
@@ -19,8 +20,9 @@
 #'
 #' Example2 <- daily_response(response = example_proxies_1,
 #' env_data = daily_temperatures_example, method = "lm",
-#' measure = "adj.r.squared", lower_limit = 50, upper_limit = 75)
+#' measure = "adj.r.squared", lower_limit = 50, upper_limit = 55)
 #' plot_heatmap(Example2)
+#' }
 
 plot_heatmap <- function(result_daily_response){
 

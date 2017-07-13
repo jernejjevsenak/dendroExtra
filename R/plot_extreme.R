@@ -11,7 +11,7 @@
 #' @export
 #'
 #' @examples
-#'
+#'\dontrun{
 #' data(daily_temperatures_example)
 #' data(example_proxies_1)
 #' Example1 <- daily_response(response = example_proxies_1,
@@ -29,8 +29,9 @@
 #' daily_temperatures_example_subset = daily_temperatures_example[-c(53:55), ]
 #' Example3 <- daily_response(response = example_proxies_2,
 #' env_data = daily_temperatures_example_subset, method = "cor",
-#' lower_limit = 30, upper_limit = 40)
+#' lower_limit = 35, upper_limit = 40)
 #' plot_extreme(Example3)
+#' }
 
 plot_extreme <- function(result_daily_response, title = TRUE) {
 

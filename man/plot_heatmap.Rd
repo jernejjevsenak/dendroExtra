@@ -18,6 +18,7 @@ Graphs a heatmap of values stored in a matrix, such as produced
 by \code{\link{daily_response}} function.
 }
 \examples{
+\dontrun{
 data(daily_temperatures_example)
 data(example_proxies_1)
 Example1 <- daily_response(response = example_proxies_1,
@@ -27,6 +28,7 @@ plot_heatmap(Example1)
 
 Example2 <- daily_response(response = example_proxies_1,
 env_data = daily_temperatures_example, method = "lm",
-measure = "adj.r.squared", lower_limit = 50, upper_limit = 75)
+measure = "adj.r.squared", lower_limit = 50, upper_limit = 55)
 plot_heatmap(Example2)
+}
 }
