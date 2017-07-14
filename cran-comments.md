@@ -5,6 +5,8 @@ This is a resubmission. Changes from previous version:
 * The same suggestion was used in readme files, so all functions are now written with parentheses.
 * Tests, R CMD check and downstream dependences were run once again. No error occurred. 
 
+I was asked about possible references, which could be added. Currently, there is no reference, but we are already preparing a paper to publish about our R package. Reference will therefore be added in one of the future versions, i.e. the first one after paper being published. 
+
 ## Test environments
 * local OS X install, R 3.4.0
 * Ubuntu precise (12.04.5 LTS) (on travis-ci), R version 3.4.0 (2017-04-21)
