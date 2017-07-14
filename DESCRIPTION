@@ -1,15 +1,13 @@
-Package: dendroLib
+Package: dendroExtra
 Type: Package
-Title: Library with Nonlinear Methods for Analyzing Dendroclimatological Data
+Title: Nonlinear Methods for Analyzing Dendroclimatological Data
 Version: 0.0.1
 Author: Jernej Jevsenak [aut, cre], Tom Levanic [ctb]
 Maintainer: Jernej Jevsenak <jernej.jevsenak@gmail.com>
-Description: Library that implements novel dendroclimatological
-    methods, primarily used by the Tree-ring research community. Functions are
-    meant to introduce nonlinear methods in dendroclimatological analysis. 
-    So far, the core function is daily_response, which finds the optimal 
-    sequence of days that are linearly or nonlinearly related to a tree-ring 
-    proxy records. 
+Description: Provides novel dendroclimatological methods, primarily used by the
+    Tree-ring research community. The core function is daily_response, which 
+    finds the optimal sequence of days that are linearly or nonlinearly related
+    to tree-ring proxy records. 
 License: GPL-3
 URL: http://github.com/jernejjevsenak/dendroLib
 BugReports: http://github.com/jernejjevsenak/dendroLib/issues
