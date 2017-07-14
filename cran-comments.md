@@ -1,10 +1,9 @@
 ## Resubmission
-This is a resubmission. In this version I have:
+This is a resubmission. Changes from previous version: 
 
-* Changed title and description, so there is no "library" anymore.
-* Changed package name from dendroLib to dendroExtra
-* All files were checked and changed accordingly to a new package name.
-* Tests, R CMD check and downstream dependences were run once again. No error occured. 
+* Function names are written with parentheses (such as daily_response()).
+* The same suggestion was used in readme files, so all functions are now written with parentheses.
+* Tests, R CMD check and downstream dependences were run once again. No error occurred. 
 
 ## Test environments
 * local OS X install, R 3.4.0
@@ -16,7 +15,7 @@ There were no ERRORs, WARNINGs or NOTEs
 
 
 ## Downstream dependencies
-We have also run R CMD check on downstream dependencies of dplR
+We have also run R CMD check on downstream dependencies of dendroExtra
 https://github.com/jernejjevsenak/dendroExtra/blob/master/revdep/checks.rds
 
 All packages that we could install passed. 
