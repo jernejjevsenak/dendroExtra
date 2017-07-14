@@ -9,8 +9,8 @@ Description: Provides novel dendroclimatological methods, primarily used by the
     finds the optimal sequence of days that are linearly or nonlinearly related
     to tree-ring proxy records. 
 License: GPL-3
-URL: http://github.com/jernejjevsenak/dendroLib
-BugReports: http://github.com/jernejjevsenak/dendroLib/issues
+URL: http://github.com/jernejjevsenak/dendroExtra
+BugReports: http://github.com/jernejjevsenak/dendroExtra/issues
 Encoding: UTF-8
 LazyData: true
 Suggests: testthat, dplyr, dplR

@@ -1,4 +1,4 @@
-library(dendroLib)
+library(dendroExtra)
 library(testthat)
 library(dplyr)
 

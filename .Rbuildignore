@@ -4,7 +4,7 @@
 ^cran-comments\.MD$ 
 ^README\.Rmd$       
 ^cran-comments\.md$
-^dendroLib\.Rproj$
+^dendroExtra\.Rproj$
 ^\.travis\.yml$
 ^README\.md$
 ^README\.Rmd$

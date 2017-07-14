@@ -1,4 +1,4 @@
 library(testthat)
-library(dendroLib)
+library(dendroExtra)
 
-test_check("dendroLib")
+test_check("dendroExtra")

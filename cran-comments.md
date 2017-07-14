@@ -16,6 +16,6 @@ There were no ERRORs, WARNINGs or NOTEs
 
 ## Downstream dependencies
 We have also run R CMD check on downstream dependencies of dplR
-https://github.com/jernejjevsenak/dendroLib/blob/master/revdep/checks.rds
+https://github.com/jernejjevsenak/dendroExtra/blob/master/revdep/checks.rds
 
 All packages that we could install passed. 

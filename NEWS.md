@@ -1,3 +1,3 @@
-# dendroLib 0.0.1.
+# dendroExtra 0.0.1.
 
-* This is the first version of the dendroLib package
+* This is the first version of the dendroExtra package
