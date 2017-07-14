@@ -1,9 +1,10 @@
 ## Resubmission
 This is a resubmission. In this version I have:
 
-* Excluded all extensive examples, which returned NOTE in the win-builder testing environment. 
-  To exclude examples \dontrun{...} was used. Before excluding examples, I tried to simplyfy 
-  them to run more quickly, but even the simpliest examples exceeded allowed computational time. 
+* Changed title and description, so there is no "library" anymore.
+* Changed package name from dendroLib to dendroExtra
+* All files were checked and changed accordingly to a new package name.
+* Tests, R CMD check and downstream dependences were run once again. No error occured. 
 
 ## Test environments
 * local OS X install, R 3.4.0
