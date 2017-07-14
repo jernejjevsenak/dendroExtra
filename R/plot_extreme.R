@@ -138,9 +138,9 @@ plot_extreme <- function(result_daily_response, title = TRUE) {
 
   # The definition of theme
   journal_theme <- theme_bw() +
-    theme(axis.text = element_text(size = 12, face = "bold"),
-          axis.title = element_text(size = 16), text = element_text(size = 14),
-          plot.title = element_text(size = 12,  face = "bold"))
+    theme(axis.text = element_text(size = 16, face = "bold"),
+          axis.title = element_text(size = 18), text = element_text(size = 18),
+          plot.title = element_text(size = 16,  face = "bold"))
 
   if (title == FALSE){
     journal_theme <- journal_theme +

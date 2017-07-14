@@ -72,8 +72,8 @@ plot_heatmap <- function(result_daily_response){
 
   # The definition of theme
   journal_theme <- theme_bw() +
-    theme(axis.text = element_text(size = 12, face = "bold"),
-          axis.title = element_text(size = 16), text = element_text(size = 14),
+    theme(axis.text = element_text(size = 16, face = "bold"),
+          axis.title = element_text(size = 18), text = element_text(size = 18),
           legend.position = "bottom", legend.key.width = unit(3, "line"),
           plot.title = element_blank())
 
