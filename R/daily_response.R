@@ -260,21 +260,28 @@ daily_response <- function(response, env_data, method = "lm",
         (1 + j): (j + fixed_width)], na.rm = TRUE)
       x <- matrix(x, nrow = nrow(env_data), ncol = 1)
       temporal_df <- data.frame(cbind(x, response))
-      temporal_model <- brnn(x ~ ., data = temporal_df, neurons = neurons, tol = 1e-50, mu = 0.000005)
-      temporal_predictions <- predict.brnn(temporal_model, temporal_df)
-      temporal_r_squared <- 1 - (sum((x[, 1] - temporal_predictions) ^ 2) /
-          sum((x[, 1] - mean(x[, 1])) ^ 2))
-      temporal_adj_r_squared <- 1 - ((1 - temporal_r_squared) *
-          ((nrow(x) - 1)) / (nrow(x) - ncol(as.data.frame(response[, 1])) - 1))
+      temporal_model <- try(brnn(x ~ ., data = temporal_df, neurons = neurons, tol = 1e-6), silent = TRUE)
+      temporal_predictions <- try(predict.brnn(temporal_model, temporal_df), silent = TRUE)
 
-      if (measure == "r.squared"){
-        temporal_matrix[1, j + 1] <- temporal_r_squared
-        print(temporal_r_squared)
-      }
+      if (class(temporal_model)[[1]] != "try-error"){
 
-      if (measure == "adj.r.squared"){
-        temporal_matrix[1, j + 1] <- temporal_adj_r_squared
-        print(temporal_adj_r_squared)
+        temporal_r_squared <- 1 - (sum((x[, 1] - temporal_predictions) ^ 2) /
+                                     sum((x[, 1] - mean(x[, 1])) ^ 2))
+        temporal_adj_r_squared <- 1 - ((1 - temporal_r_squared) *
+                                         ((nrow(x) - 1)) / (nrow(x) - ncol(as.data.frame(response[, 1])) - 1))
+
+        if (measure == "r.squared"){
+          temporal_matrix[1, j + 1] <- temporal_r_squared
+          print(temporal_r_squared)
+        }
+
+        if (measure == "adj.r.squared"){
+          temporal_matrix[1, j + 1] <- temporal_adj_r_squared
+          print(temporal_adj_r_squared)
+        } else {
+
+          temporal_matrix[1, j + 1] = NA
+        }
       }
     }
 
@@ -384,23 +391,31 @@ daily_response <- function(response, env_data, method = "lm",
           na.rm = T)
         x <- matrix(x, nrow = nrow(env_data), ncol = 1)
         temporal_df <- data.frame(cbind(x, response))
-        temporal_model <- brnn(x ~ ., data = temporal_df, neurons = neurons, tol = 1e-50, mu = 0.000005)
-        temporal_predictions <- predict.brnn(temporal_model, temporal_df)
-        temporal_r_squared <- 1 - (sum((x[, 1] - temporal_predictions) ^ 2) /
-            sum((x[, 1] - mean(x[, 1])) ^ 2))
-        temporal_adj_r_squared <- 1 - ((1 - temporal_r_squared) *
-            ((nrow(x) - 1)) / (nrow(x) -
-                ncol(as.data.frame(response[, 1])) - 1))
+        temporal_model <- try(brnn(x ~ ., data = temporal_df, neurons = neurons, tol = 1e-6), silent = TRUE)
+        temporal_predictions <- try(predict.brnn(temporal_model, temporal_df), silent = TRUE)
 
-        if (measure == "r.squared"){
-          temporal_matrix[(k - lower_limit) + 1, j + 1]  <- temporal_r_squared
-          print(temporal_r_squared)
-        }
+        if (class(temporal_model)[[1]] != "try-error"){
 
-        if (measure == "adj.r.squared"){
-          temporal_matrix[(k - lower_limit) + 1, j + 1]  <-
-            temporal_adj_r_squared
-          print(temporal_adj_r_squared)
+          temporal_r_squared <- 1 - (sum((x[, 1] - temporal_predictions) ^ 2) /
+                                       sum((x[, 1] - mean(x[, 1])) ^ 2))
+          temporal_adj_r_squared <- 1 - ((1 - temporal_r_squared) *
+                                           ((nrow(x) - 1)) / (nrow(x) -
+                                                                ncol(as.data.frame(response[, 1])) - 1))
+
+          if (measure == "r.squared"){
+            temporal_matrix[(k - lower_limit) + 1, j + 1]  <- temporal_r_squared
+            print(temporal_r_squared)
+          }
+
+          if (measure == "adj.r.squared"){
+            temporal_matrix[(k - lower_limit) + 1, j + 1]  <-
+              temporal_adj_r_squared
+            print(temporal_adj_r_squared)
+          }
+
+        } else {
+          temporal_matrix[(k - lower_limit) + 1, j + 1] = NA
+
         }
       }
     }
