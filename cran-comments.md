@@ -5,6 +5,8 @@ This is a resubmission. CRAN devtools results returned the following error: Pack
 * I removed the specific version of 'stats' in the Imports field in the Description file. 
 * I changed the import in the NAMESCPACE for 'stats'. Now: importFrom("stats", "cor", "lm", "qt", "quantile")
 
+I have also changed the version of dendroExtra to 0.0.2
+
 ## Test environments
 * local OS X install, R 3.4.0
 * Ubuntu precise (12.04.5 LTS) (on travis-ci), R version 3.4.0 (2017-04-21)
