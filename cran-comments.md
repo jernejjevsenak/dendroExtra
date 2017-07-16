@@ -1,11 +1,9 @@
 ## Resubmission
-This is a resubmission. Changes from previous version: 
+This is a resubmission. CRAN devtools results returned the following error: Package required and available but unsuitable version: 'stats'. To remove the error:
 
-* Function names are written with parentheses (such as daily_response()).
-* The same suggestion was used in readme files, so all functions are now written with parentheses.
-* Tests, R CMD check and downstream dependences were run once again. No error occurred. 
-
-I was asked about possible references, which could be added. Currently, there is no reference, but we are already preparing a paper to publish about our R package. Reference will therefore be added in one of the future versions, i.e. the first one after paper being published. 
+* I changed the Depends field in the Description file: Depends: R (>= 3.4). I decided to do that since the error was produced in an earlier version of R (i.e. R 3.3.3 (2017-03-06)).
+* I removed the specific version of 'stats' in the Imports field in the Description file. 
+* I changed the import in the NAMESCPACE for 'stats'. Now: importFrom("stats", "cor", "lm", "qt", "quantile")
 
 ## Test environments
 * local OS X install, R 3.4.0

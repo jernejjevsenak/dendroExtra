@@ -15,6 +15,10 @@ Encoding: UTF-8
 LazyData: true
 Suggests: testthat, dplyr, dplR
 RoxygenNote: 6.0.1
-Imports: ggplot2 (>= 2.2.0), brnn (>= 0.6), reshape2 (>= 1.4.2), oce (>= 0.9-21), 
-    stats (>= 3.4.0), scales (>= 0.4.1)
-Depends: R (>= 3.1)
+Imports: ggplot2 (>= 2.2.0), brnn (>= 0.6), reshape2 (>= 1.4.2), oce
+        (>= 0.9-21), scales (>= 0.4.1), stats
+Depends: R (>= 3.4)
+NeedsCompilation: no
+Packaged: 2017-07-14 17:56:16 UTC; JernejJ
+Repository: CRAN
+Date/Publication: 2017-07-14 18:44:08 UTC
