@@ -83,6 +83,8 @@ daily_response <- function(response, env_data, method = "lm",
 
   # PART 1 - general data arrangements, warnings abd stops
 
+  set.seed(neurons * 55)
+
   # Both bojects (response and env_data) are converted to data frames
   response <- data.frame(response)
   env_data <- data.frame(env_data)
@@ -476,6 +478,90 @@ daily_response <- function(response, env_data, method = "lm",
   if (method == "cor"){
     final_list <- list(calculations = temporal_matrix, method = method,
                         measure = method)
+  }
+
+
+  # Here we add additional, fourth element: the optimal sequence of days
+  # that returns the best selected statistical measure
+
+  # In case of negative correlations, different strategy is applied.
+  # For more detailed description see plot_extreme()
+
+  overall_max <- max(temporal_matrix, na.rm = TRUE)
+  overall_min <- min(temporal_matrix, na.rm = TRUE)
+
+  # absolute vales of overall_maximum and overall_minimum are compared and
+  # one of the following two if functions is used
+  # There are unimportant warnings produced:
+  # no non-missing arguments to max; returning -Inf
+
+
+  if ((abs(overall_max) > abs(overall_min)) == TRUE) {
+
+    # maximum value is located. Row indeces are needed to query information
+    # about the window width used to calculate the maximum. Column name is
+    # needed to query the starting day.
+    max_result <- suppressWarnings(which.max(apply(temporal_matrix,
+                                                   MARGIN = 2, max, na.rm = TRUE)))
+    plot_column <- max_result
+    max_index <- which.max(temporal_matrix[, names(max_result)])
+    row_index <- row.names(temporal_matrix)[max_index]
+  }
+
+  if ((abs(overall_max) < abs(overall_min)) == TRUE) {
+
+    min_result <- suppressWarnings(which.min(apply(temporal_matrix,
+                                                   MARGIN = 2, min, na.rm = TRUE)))
+    plot_column <- min_result
+    min_index <- which.min(temporal_matrix[, names(min_result)])
+    row_index <- row.names(temporal_matrix)[min_index]
+  }
+
+  # The fourth return element is being created: rowMeans of optimal sequence:
+  dataf = data.frame(rowMeans(env_data[, as.numeric(plot_column):
+                                         (as.numeric(plot_column) +
+                                            as.numeric(row_index) - 1)],
+                              na.rm = TRUE))
+
+  colnames(dataf) = 'Optimized rowNames'
+
+  final_list[[4]] = dataf
+
+  # Additional check:
+  if (method == "lm" & measure == "r.squared"){
+    temporal_df <- data.frame(cbind(dataf, response))
+    temporal_model <- lm(Optimized.rowNames ~ ., data = temporal_df)
+    temporal_summary <- summary(temporal_model)
+    optimized_result <- temporal_summary$r.squared
+  }
+
+  if (method == "lm" & measure == "adj.r.squared"){
+    temporal_df <- data.frame(cbind(dataf, response))
+    temporal_model <- lm(Optimized.rowNames ~ ., data = temporal_df)
+    temporal_summary <- summary(temporal_model)
+    optimized_result <- temporal_summary$adj.r.squared
+  }
+
+  if (method == "brnn" & measure == "r.squared"){
+    temporal_df <- data.frame(cbind(dataf, response))
+    temporal_model <- brnn(Optimized.rowNames ~ ., data = temporal_df, neurons = neurons, tol = 1e-6)
+    temporal_predictions <- try(predict.brnn(temporal_model, temporal_df), silent = TRUE)
+    optimized_result <- 1 - (sum((temporal_df[, 1] - temporal_predictions) ^ 2) /
+                                 sum((temporal_df[, 1] - mean(temporal_df[, 1])) ^ 2))
+  }
+
+  if (method == "brnn" & measure == "adj.r.squared"){
+    temporal_df <- data.frame(cbind(dataf, response))
+    temporal_model <- brnn(Optimized.rowNames ~ ., data = temporal_df, neurons = neurons, tol = 1e-6)
+    temporal_predictions <- try(predict.brnn(temporal_model, temporal_df), silent = TRUE)
+    temporal_r_squared <- 1 - (sum((temporal_df[, 1] - temporal_predictions) ^ 2) /
+                               sum((temporal_df[, 1] - mean(temporal_df[, 1])) ^ 2))
+    optimized_result <- 1 - ((1 - temporal_r_squared) *
+                                     ((nrow(temporal_df) - 1)) / (nrow(temporal_df) - ncol(as.data.frame(response[, 1])) - 1))
+  }
+
+  if (method == "cor"){
+    optimized_result <- cor(dataf, response)
   }
 
   return(final_list)
