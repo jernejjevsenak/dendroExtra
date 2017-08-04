@@ -113,5 +113,5 @@ plot_heatmap <- function(result_daily_response){
       xlab("Day of Year  (Including Previous Year)")
   }
 
-  print(final_plot)
+  final_plot
 }

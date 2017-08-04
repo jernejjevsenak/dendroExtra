@@ -275,5 +275,5 @@ plot_extreme <- function(result_daily_response, title = TRUE) {
       ylab("Adjusted Explained Variance")
   }
 
-  print(final_plot)
+  final_plot
 }

@@ -267,5 +267,5 @@ plot_specific <- function(result_daily_response, window_width, title = TRUE) {
       ylab("Adjusted Explained Variance")
   }
 
-  print(final_plot)
+  final_plot
 }

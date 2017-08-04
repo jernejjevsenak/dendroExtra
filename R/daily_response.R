@@ -43,7 +43,7 @@
 #' env_data and response data frames. Only years from both data frames are
 #' kept.
 #'
-#' @return a list with three elements: @calculations, @method, @measure
+#' @return a list with four elements: @calculations, @method, @measure, @optimized_result
 #'
 #' @export
 #'
