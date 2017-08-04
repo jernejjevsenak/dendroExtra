@@ -55,7 +55,7 @@ env_data and response data frames. Only years from both data frames are
 kept.}
 }
 \value{
-a list with three elements: @calculations, @method, @measure
+a list with four elements: @calculations, @method, @measure, @optimized_result
 }
 \description{
 Function calculates all possible values of a selected statistical measure
