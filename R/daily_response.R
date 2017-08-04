@@ -262,15 +262,21 @@ daily_response <- function(response, env_data, method = "lm",
         (1 + j): (j + fixed_width)], na.rm = TRUE)
       x <- matrix(x, nrow = nrow(env_data), ncol = 1)
       temporal_df <- data.frame(cbind(x, response))
-      temporal_model <- try(brnn(x ~ ., data = temporal_df, neurons = neurons, tol = 1e-6), silent = TRUE)
-      temporal_predictions <- try(predict.brnn(temporal_model, temporal_df), silent = TRUE)
+      temporal_model <- try(brnn(x ~ ., data = temporal_df,
+                                 neurons = neurons, tol = 1e-6),
+                            silent = TRUE)
+      temporal_predictions <- try(predict.brnn(temporal_model, temporal_df),
+                                  silent = TRUE)
 
       if (class(temporal_model)[[1]] != "try-error"){
 
         temporal_r_squared <- 1 - (sum((x[, 1] - temporal_predictions) ^ 2) /
                                      sum((x[, 1] - mean(x[, 1])) ^ 2))
         temporal_adj_r_squared <- 1 - ((1 - temporal_r_squared) *
-                                         ((nrow(x) - 1)) / (nrow(x) - ncol(as.data.frame(response[, 1])) - 1))
+                                         ((nrow(x) - 1)) /
+                                         (nrow(x) -
+                                            ncol(as.data.frame(response[, 1]))
+                                          -  1))
 
         if (measure == "r.squared"){
           temporal_matrix[1, j + 1] <- temporal_r_squared
@@ -282,7 +288,7 @@ daily_response <- function(response, env_data, method = "lm",
           print(temporal_adj_r_squared)
         } else {
 
-          temporal_matrix[1, j + 1] = NA
+          temporal_matrix[1, j + 1] <- NA
         }
       }
     }
@@ -393,16 +399,20 @@ daily_response <- function(response, env_data, method = "lm",
           na.rm = T)
         x <- matrix(x, nrow = nrow(env_data), ncol = 1)
         temporal_df <- data.frame(cbind(x, response))
-        temporal_model <- try(brnn(x ~ ., data = temporal_df, neurons = neurons, tol = 1e-6), silent = TRUE)
-        temporal_predictions <- try(predict.brnn(temporal_model, temporal_df), silent = TRUE)
+        temporal_model <- try(brnn(x ~ ., data = temporal_df, neurons = neurons,
+                                   tol = 1e-6), silent = TRUE)
+        temporal_predictions <- try(predict.brnn(temporal_model, temporal_df),
+                                    silent = TRUE)
 
         if (class(temporal_model)[[1]] != "try-error"){
 
           temporal_r_squared <- 1 - (sum((x[, 1] - temporal_predictions) ^ 2) /
                                        sum((x[, 1] - mean(x[, 1])) ^ 2))
           temporal_adj_r_squared <- 1 - ((1 - temporal_r_squared) *
-                                           ((nrow(x) - 1)) / (nrow(x) -
-                                                                ncol(as.data.frame(response[, 1])) - 1))
+                                           ((nrow(x) - 1)) /
+                                           (nrow(x) -
+                                              ncol(as.data.frame(response[, 1]))
+                                            - 1))
 
           if (measure == "r.squared"){
             temporal_matrix[(k - lower_limit) + 1, j + 1]  <- temporal_r_squared
@@ -416,7 +426,7 @@ daily_response <- function(response, env_data, method = "lm",
           }
 
         } else {
-          temporal_matrix[(k - lower_limit) + 1, j + 1] = NA
+          temporal_matrix[(k - lower_limit) + 1, j + 1] <- NA
 
         }
       }
@@ -502,7 +512,8 @@ daily_response <- function(response, env_data, method = "lm",
     # about the window width used to calculate the maximum. Column name is
     # needed to query the starting day.
     max_result <- suppressWarnings(which.max(apply(temporal_matrix,
-                                                   MARGIN = 2, max, na.rm = TRUE)))
+                                                   MARGIN = 2, max,
+                                                   na.rm = TRUE)))
     plot_column <- max_result
     max_index <- which.max(temporal_matrix[, names(max_result)])
     row_index <- row.names(temporal_matrix)[max_index]
@@ -511,21 +522,22 @@ daily_response <- function(response, env_data, method = "lm",
   if ((abs(overall_max) < abs(overall_min)) == TRUE) {
 
     min_result <- suppressWarnings(which.min(apply(temporal_matrix,
-                                                   MARGIN = 2, min, na.rm = TRUE)))
+                                                   MARGIN = 2, min,
+                                                   na.rm = TRUE)))
     plot_column <- min_result
     min_index <- which.min(temporal_matrix[, names(min_result)])
     row_index <- row.names(temporal_matrix)[min_index]
   }
 
   # The fourth return element is being created: rowMeans of optimal sequence:
-  dataf = data.frame(rowMeans(env_data[, as.numeric(plot_column):
+  dataf <- data.frame(rowMeans(env_data[, as.numeric(plot_column):
                                          (as.numeric(plot_column) +
                                             as.numeric(row_index) - 1)],
                               na.rm = TRUE))
 
-  colnames(dataf) = 'Optimized rowNames'
+  colnames(dataf) <- "Optimized rowNames"
 
-  final_list[[4]] = dataf
+  final_list[[4]] <- dataf
 
   # Additional check:
   if (method == "lm" & measure == "r.squared"){
@@ -544,20 +556,30 @@ daily_response <- function(response, env_data, method = "lm",
 
   if (method == "brnn" & measure == "r.squared"){
     temporal_df <- data.frame(cbind(dataf, response))
-    temporal_model <- brnn(Optimized.rowNames ~ ., data = temporal_df, neurons = neurons, tol = 1e-6)
-    temporal_predictions <- try(predict.brnn(temporal_model, temporal_df), silent = TRUE)
-    optimized_result <- 1 - (sum((temporal_df[, 1] - temporal_predictions) ^ 2) /
-                                 sum((temporal_df[, 1] - mean(temporal_df[, 1])) ^ 2))
+    temporal_model <- brnn(Optimized.rowNames ~ ., data = temporal_df,
+                           neurons = neurons, tol = 1e-6)
+    temporal_predictions <- try(predict.brnn(temporal_model,
+                                             temporal_df), silent = TRUE)
+    optimized_result <- 1 - (sum((temporal_df[, 1] -
+                                    temporal_predictions) ^ 2) /
+                                 sum((temporal_df[, 1] -
+                                        mean(temporal_df[, 1])) ^ 2))
   }
 
   if (method == "brnn" & measure == "adj.r.squared"){
     temporal_df <- data.frame(cbind(dataf, response))
-    temporal_model <- brnn(Optimized.rowNames ~ ., data = temporal_df, neurons = neurons, tol = 1e-6)
-    temporal_predictions <- try(predict.brnn(temporal_model, temporal_df), silent = TRUE)
-    temporal_r_squared <- 1 - (sum((temporal_df[, 1] - temporal_predictions) ^ 2) /
-                               sum((temporal_df[, 1] - mean(temporal_df[, 1])) ^ 2))
+    temporal_model <- brnn(Optimized.rowNames ~ .,
+                           data = temporal_df, neurons = neurons, tol = 1e-6)
+    temporal_predictions <- try(predict.brnn(temporal_model, temporal_df),
+                                silent = TRUE)
+    temporal_r_squared <- 1 - (sum((temporal_df[, 1] -
+                                      temporal_predictions) ^ 2) /
+                               sum((temporal_df[, 1] -
+                                      mean(temporal_df[, 1])) ^ 2))
     optimized_result <- 1 - ((1 - temporal_r_squared) *
-                                     ((nrow(temporal_df) - 1)) / (nrow(temporal_df) - ncol(as.data.frame(response[, 1])) - 1))
+                                     ((nrow(temporal_df) - 1)) /
+                               (nrow(temporal_df) -
+                                  ncol(as.data.frame(response[, 1])) - 1))
   }
 
   if (method == "cor"){

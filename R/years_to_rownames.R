@@ -13,8 +13,8 @@
 #' \dontrun{
 #' new_df = years_to_rownames(data = daily_sequences, column_year = "years")
 #' }
-years_to_rownames = function(data, column_year) {
-  year_index = grep(column_year, colnames(data))
-  row.names(data) = data[, year_index]
-  data = data[, -year_index]
+years_to_rownames <- function(data, column_year) {
+  year_index <- grep(column_year, colnames(data))
+  row.names(data) <- data[, year_index]
+  data <- data[, -year_index]
 }

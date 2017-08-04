@@ -109,5 +109,3 @@ expect_equal(test8[[1]], test9[[1]])
 
 # There should be 4 elements in a list returned by daily_response()
 expect_equal(length(test8), 4)
-
-
