@@ -10,5 +10,4 @@
 * I changed the Depends field in the Description file: Depends: R (>= 3.4). I decided to do that since the error was produced in an earlier version of R (i.e. R 3.3.3 (2017-03-06)).
 * I removed the specific version of 'stats' in the Imports field in the Description file. 
 * I changed the import in the NAMESCPACE for 'stats'. Now: importFrom("stats", "cor", "lm", "qt", "quantile")
-
 * plot_heatmap(), plot_extreme() and plot_specific() were modifyed: the print() argument at the end of the function was deleted.

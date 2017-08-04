@@ -9,8 +9,8 @@ I have also changed the version of dendroExtra to 0.0.2
 
 ## Test environments
 * local OS X install, R 3.4.0
-* Ubuntu precise (12.04.5 LTS) (on travis-ci), R version 3.4.0 (2017-04-21)
-* win-builder (R Under development (unstable) (2017-07-14 r72918))
+* Ubuntu precise (12.04.5 LTS) (on travis-ci), R version 3.4.1 (2017-06-30)
+* win-builder (R Under development (unstable) (2017-08-03 r73028))
 
 ## R CMD check results
 There were no ERRORs, WARNINGs or NOTEs
